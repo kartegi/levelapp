@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     position: "relative",
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#b5daf5",
     paddingTop: 30,
   },
 });
