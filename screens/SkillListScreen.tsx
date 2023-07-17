@@ -4,9 +4,10 @@ import { StyleSheet } from "react-native";
 
 import { FlatList } from "react-native-gesture-handler";
 
-import { SkillListItems } from "../constants/dummy";
+import AddButton from "../components/UI/AddButton/AddButton";
 import SkillItem from "../components/SkillItem/SkillItem";
-import IconButton from "../components/UI/IconButton/IconButton";
+
+import { SkillListItems } from "../constants/dummy";
 import { Colors } from "../constants/colors";
 
 const SkillListScreen = ({ navigation }: { navigation: any }) => {
@@ -18,10 +19,7 @@ const SkillListScreen = ({ navigation }: { navigation: any }) => {
 
   return (
     <>
-      <IconButton
-        icon={"add-circle-sharp"}
-        color={Colors.green}
-        size={60}
+      <AddButton
         onPress={onCreateNewSkill}
         iconContainerStyle={{
           position: "absolute",
