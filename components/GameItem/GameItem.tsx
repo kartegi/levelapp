@@ -13,11 +13,11 @@ import { Colors } from "../../constants/colors";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
 import { CARD_HEIGHT } from "../../constants/common";
 
-interface SkillItemProps {
+interface GameItemProps {
   flatListRef: any;
 }
 
-const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
+const GameItem: React.FC<GameItemProps> = ({ flatListRef }) => {
   const pressableOpacity = useSharedValue(1);
 
   const fadeAnimation = () => {
@@ -48,7 +48,7 @@ const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
 
           <View style={styles.cardInfo}>
             <View>
-              <Text style={styles.title}>Skill Title</Text>
+              <Text style={styles.title}>Game Title</Text>
               <Text style={styles.infoText}>Goal: 10000h</Text>
               <Text style={styles.infoText}>Progress: 500h</Text>
             </View>
@@ -72,7 +72,7 @@ const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
   );
 };
 
-export default React.memo(SkillItem);
+export default React.memo(GameItem);
 
 const styles = StyleSheet.create({
   itemContainer: {

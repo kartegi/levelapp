@@ -4,23 +4,23 @@ import { StyleSheet } from "react-native";
 
 import { FlatList } from "react-native-gesture-handler";
 
-import AddButton from "../components/UI/AddButton/AddButton";
-import SkillItem from "../components/SkillItem/SkillItem";
+import AddButton from "../components/UI/Buttons/AddButton/AddButton";
+import GameItem from "../components/GameItem/GameItem";
 
-import { SkillListItems } from "../constants/dummy";
+import { GameListItems } from "../constants/dummy";
 import { Colors } from "../constants/colors";
 
-const SkillListScreen = ({ navigation }: { navigation: any }) => {
+const GameListScreen = ({ navigation }: { navigation: any }) => {
   const flatListRef = useRef<any>(null);
 
-  const onCreateNewSkill = () => {
-    navigation.navigate("NewSkill");
+  const onCreateNewGame = () => {
+    navigation.navigate("NewGame");
   };
 
   return (
     <>
       <AddButton
-        onPress={onCreateNewSkill}
+        onPress={onCreateNewGame}
         iconContainerStyle={{
           position: "absolute",
           bottom: 20,
@@ -30,10 +30,8 @@ const SkillListScreen = ({ navigation }: { navigation: any }) => {
       />
       <FlatList
         ref={(ref) => (flatListRef.current = ref?.getNativeScrollRef())}
-        data={SkillListItems}
-        renderItem={({ item, index }) => (
-          <SkillItem flatListRef={flatListRef} />
-        )}
+        data={GameListItems}
+        renderItem={({ item, index }) => <GameItem flatListRef={flatListRef} />}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.container}
@@ -42,7 +40,7 @@ const SkillListScreen = ({ navigation }: { navigation: any }) => {
   );
 };
 
-export default SkillListScreen;
+export default GameListScreen;
 
 const styles = StyleSheet.create({
   container: {
