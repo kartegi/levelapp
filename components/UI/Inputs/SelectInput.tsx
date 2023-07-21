@@ -33,6 +33,7 @@ const SelectInput: React.FC<SelectInputProps> = ({
   placeholder,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
   const [selectedItem, setSelectedItem] = useState<IOption>({
     key: "-1",
     value: placeholder ? placeholder : "Select option",
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: -20,
     width: "100%",
-    backgroundColor: "rgba(255,255,255, 0.5)",
+    backgroundColor: "rgba(255,255,255, 0.2)",
     borderRadius: 12,
     overflow: "hidden",
   },
