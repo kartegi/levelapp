@@ -10,6 +10,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { Colors } from "./constants/colors";
 import StackNavigation from "./navigation/StackNavigation/StackNavigation";
+import { init } from "./utils/database";
 
 const NewTheme = {
   ...DefaultTheme,
@@ -25,6 +26,7 @@ export default function App() {
       if (Platform.OS === "android") {
         await NavigationBar.setBackgroundColorAsync(Colors.black);
       }
+      await init();
     })();
   }, []);
 
