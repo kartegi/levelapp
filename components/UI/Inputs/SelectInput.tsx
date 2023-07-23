@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Dispatch, SetStateAction } from "react";
 
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -13,26 +13,28 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { Colors } from "../../../constants/colors";
-
-export interface IOption {
-  key: string;
-  value: string;
-}
+import { IOption } from "../../../models/common.interface";
 
 interface SelectInputProps {
   data: IOption[];
   height: number;
   onSelect: (item: IOption) => void;
+  isExpanded: boolean;
+  setIsExpanded: Dispatch<SetStateAction<boolean>>;
   placeholder?: string;
+  error?: boolean;
 }
 
 const SelectInput: React.FC<SelectInputProps> = ({
   data,
   height,
   onSelect,
+  isExpanded,
+  setIsExpanded,
   placeholder,
+  error,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  // const [isExpanded, setIsExpanded] = useState(false);
 
   const [selectedItem, setSelectedItem] = useState<IOption>({
     key: "-1",
@@ -66,9 +68,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
   };
 
   return (
-    <View>
+    <View style={styles.rootContainer}>
       <Pressable
-        style={[styles.selectInput, { height }]}
+        style={[styles.selectInput, error && styles.error, { height }]}
         onPress={() => setIsExpanded((prev) => !prev)}
       >
         <Text
@@ -80,9 +82,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
           {selectedItem.value}
         </Text>
         {isExpanded ? (
-          <AntDesign name="close" size={24} color={Colors.grey} />
+          <AntDesign name="close" size={24} color={"grey"} />
         ) : (
-          <AntDesign name="down" size={24} color={Colors.grey} />
+          <AntDesign name="down" size={24} color={"grey"} />
         )}
       </Pressable>
 
@@ -101,7 +103,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
                 </Pressable>
               </View>
             )}
-            ItemSeparatorComponent={() => <View style={{ height: 12 }} />}
+            ItemSeparatorComponent={() => (
+              <Pressable android_disableSound={true} style={{ height: 12 }} />
+            )}
             contentContainerStyle={[styles.dropdownContainerContent]}
           />
         </Animated.View>
@@ -113,6 +117,9 @@ const SelectInput: React.FC<SelectInputProps> = ({
 export default SelectInput;
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    zIndex: 1,
+  },
   selectInput: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -131,6 +138,10 @@ const styles = StyleSheet.create({
     shadowRadius: 2.22,
 
     elevation: 3,
+  },
+  error: {
+    borderWidth: 2,
+    borderColor: Colors.red,
   },
   inputText: {
     fontSize: 16,
