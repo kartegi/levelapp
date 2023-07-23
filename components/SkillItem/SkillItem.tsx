@@ -12,12 +12,15 @@ import Animated, {
 import { Colors } from "../../constants/colors";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
 import { CARD_HEIGHT } from "../../constants/common";
+import { ISkillListItems } from "../../models/common.interface";
+import { getFormatedDate } from "../../utils/date";
 
 interface SkillItemProps {
+  item: ISkillListItems;
   flatListRef: any;
 }
 
-const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
+const SkillItem: React.FC<SkillItemProps> = ({ item, flatListRef }) => {
   const pressableOpacity = useSharedValue(1);
 
   const fadeAnimation = () => {
@@ -48,14 +51,16 @@ const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
 
           <View style={styles.cardInfo}>
             <View>
-              <Text style={styles.title}>Skill Title</Text>
-              <Text style={styles.infoText}>Goal: 10000h</Text>
-              <Text style={styles.infoText}>Progress: 500h</Text>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.infoText}>Goal: {item.goal}h</Text>
+              <Text style={styles.infoText}>Progress: {item.progress}h</Text>
             </View>
             <View></View>
             <View style={styles.cardSubInfoContainer}>
-              <Text style={styles.cardDate}>26.12.1993</Text>
-              <Text style={styles.percentageText}>{(500 / 10000) * 100}%</Text>
+              <Text style={styles.cardDate}>{getFormatedDate(new Date())}</Text>
+              <Text style={styles.percentageText}>
+                {((item.progress / item.goal) * 100).toFixed(2)}%
+              </Text>
             </View>
           </View>
 
@@ -63,7 +68,7 @@ const SkillItem: React.FC<SkillItemProps> = ({ flatListRef }) => {
             style={[
               styles.background,
               styles.progressBar,
-              { width: `${(500 / 10000) * 107}%` },
+              { width: `${(item.progress / item.goal) * 107}%` },
             ]}
           ></View>
         </Animated.View>
