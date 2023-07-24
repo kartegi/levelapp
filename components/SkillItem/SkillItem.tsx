@@ -18,9 +18,14 @@ import { getFormatedDate } from "../../utils/date";
 interface SkillItemProps {
   item: ISkillListItems;
   flatListRef: any;
+  archive: 1 | 0;
 }
 
-const SkillItem: React.FC<SkillItemProps> = ({ item, flatListRef }) => {
+const SkillItem: React.FC<SkillItemProps> = ({
+  item,
+  flatListRef,
+  archive,
+}) => {
   const pressableOpacity = useSharedValue(1);
 
   const fadeAnimation = () => {
@@ -38,7 +43,7 @@ const SkillItem: React.FC<SkillItemProps> = ({ item, flatListRef }) => {
   }));
 
   return (
-    <SwipeableRow flatListRef={flatListRef}>
+    <SwipeableRow item={item} archive={archive}>
       <Pressable style={styles.itemContainer} onPress={handlePress}>
         <Animated.View style={[styles.animationContainer, rOpacityStyle]}>
           <LinearGradient
@@ -57,7 +62,9 @@ const SkillItem: React.FC<SkillItemProps> = ({ item, flatListRef }) => {
             </View>
             <View></View>
             <View style={styles.cardSubInfoContainer}>
-              <Text style={styles.cardDate}>{getFormatedDate(new Date())}</Text>
+              <Text style={styles.cardDate}>
+                {getFormatedDate(new Date().toISOString())}
+              </Text>
               <Text style={styles.percentageText}>
                 {((item.progress / item.goal) * 100).toFixed(2)}%
               </Text>

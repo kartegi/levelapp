@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from "react";
+import React, { ReactNode, useContext, useRef } from "react";
 
 import { StyleSheet, Animated as ReactAnimated, Alert } from "react-native";
 
@@ -9,18 +9,24 @@ import { Swipeable } from "react-native-gesture-handler";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
+  withDelay,
   withTiming,
 } from "react-native-reanimated";
 import { Colors } from "../../constants/colors";
+import { ISkillListItems } from "../../models/common.interface";
+import { deleteSkill, updateSkill } from "../../utils/database";
+import { SkillsContext } from "../../store/SkillsContext";
 
 interface SwipeableRowProps {
   children: ReactNode;
-  flatListRef: any;
+  archive: 1 | 0;
+  item: ISkillListItems;
 }
 
 const SwipeableRow: React.FC<SwipeableRowProps> = ({
   children,
-  flatListRef,
+  archive,
+  item,
 }) => {
   const { getSkillsList } = useContext(SkillsContext);
 
@@ -40,11 +46,19 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
 
     return (
       <ReactAnimated.View style={[styles.arvhiveIconContainer, { opacity }]}>
-        <Ionicons
-          name="arrow-down-circle-outline"
-          size={48}
-          color={Colors.teal}
-        />
+        {archive ? (
+          <Ionicons
+            name="arrow-up-circle-outline"
+            size={48}
+            color={Colors.teal}
+          />
+        ) : (
+          <Ionicons
+            name="arrow-down-circle-outline"
+            size={48}
+            color={Colors.teal}
+          />
+        )}
       </ReactAnimated.View>
     );
   };
@@ -65,9 +79,9 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
     );
   };
 
-  const removeItem = (action: "archive" | "delete") => {
-    swipeDirection.value = withTiming(action === "archive" ? 100 : -100);
-    rowHeight.value = withTiming(0);
+  const itemRemoveAnimation = (action: "archive" | "delete") => {
+    swipeDirection.value = withTiming(action === "archive" ? 300 : -300);
+    rowHeight.value = withDelay(100, withTiming(0));
     marginVertical.value = withTiming(0);
   };
 
@@ -93,22 +107,26 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
 
   const onRowOpen = (direction: "left" | "right") => {
     if (direction === "left") {
-      Alert.alert("Are you sure you want to archive?", "", [
-        {
-          text: "Continue",
-          onPress: () => removeItem("archive"),
-        },
-        {
-          text: "Cancel",
-          onPress: () => swipeableRef.current?.close(),
-          style: "cancel",
-        },
-      ]);
+      Alert.alert(
+        `Are you sure you want to ${archive ? "unarchive" : "archive"}?`,
+        "",
+        [
+          {
+            text: "Continue",
+            onPress: () => updateItem(),
+          },
+          {
+            text: "Cancel",
+            onPress: () => swipeableRef.current?.close(),
+            style: "cancel",
+          },
+        ]
+      );
     } else {
       Alert.alert("Are you sure you want to delete?", "", [
         {
           text: "Continue",
-          onPress: () => removeItem("delete"),
+          onPress: () => removeItem(),
         },
         {
           text: "Cancel",
@@ -118,7 +136,7 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
       ]);
     }
   };
-  // console.log(isScrollActive);
+
   const rStyle = useAnimatedStyle(() => ({
     height: rowHeight.value,
     marginVertical: marginVertical.value,

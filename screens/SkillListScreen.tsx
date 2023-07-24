@@ -1,8 +1,10 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 
-import { StyleSheet, Alert, View, Text } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { FlatList } from "react-native-gesture-handler";
+
+import { CompositeScreenProps } from "@react-navigation/native";
 
 import AddButton from "../components/UI/Buttons/AddButton/AddButton";
 import SkillItem from "../components/SkillItem/SkillItem";
@@ -11,39 +13,23 @@ import { Colors } from "../constants/colors";
 
 import { SkillsContext } from "../store/SkillsContext";
 
-const SkillListScreen = ({ navigation }: { navigation: any }) => {
-  const [data, setData] = useState<ISkillListItems[]>([]);
-  const [isLoading, setIsloading] = useState(false);
+interface SkillListScreenProps extends CompositeScreenProps<any, any> {}
 
+const SkillListScreen: React.FC<SkillListScreenProps> = ({
+  navigation,
+  route,
+}) => {
   const { skills, getSkillsList } = useContext(SkillsContext);
 
   useEffect(() => {
-    getSillList();
+    getSkillsList();
   }, []);
 
-  const getSillList = async () => {
-    try {
-      setIsloading(true);
-      const { rows } = await getAllSkillsFromDb();
-      setData(rows);
-    } catch (error) {
-      Alert.alert("Error", error as string);
-    } finally {
-      setIsloading(false);
-    }
-  };
+  const flatListRef = useRef<any>(null);
 
   const onCreateNewSkill = () => {
     navigation.navigate("NewSkill");
   };
-
-  if (isLoading) {
-    return (
-      <View style={styles.preloader}>
-        <Text style={styles.preloaderText}>Loading...</Text>
-      </View>
-    );
-  }
 
   return (
     <>

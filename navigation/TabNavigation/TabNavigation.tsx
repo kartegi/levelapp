@@ -24,7 +24,7 @@ const TabNavigation = () => {
         tabBarInactiveTintColor: Colors.white,
       }}
     >
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
@@ -34,13 +34,26 @@ const TabNavigation = () => {
             <Ionicons name="person-circle-outline" color={color} size={size} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="Skills"
         component={SkillListScreen}
+        initialParams={{ archive: false }}
         options={{
           title: "Skills",
           tabBarLabel: "Skills",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="list-circle-outline" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Archive"
+        component={SkillListScreen}
+        initialParams={{ archive: true }}
+        options={{
+          title: "Archive",
+          tabBarLabel: "Archive",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list-circle-outline" color={color} size={size} />
           ),

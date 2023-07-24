@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 
 import { StyleSheet, View, Keyboard, Pressable, Text } from "react-native";
 
@@ -11,6 +11,7 @@ import { Colors } from "../constants/colors";
 import Button from "../components/UI/Buttons/Button";
 
 import { FormDataValues, IOption } from "../models/common.interface";
+import { addSkill } from "../utils/database";
 import { SkillsContext } from "../store/SkillsContext";
 
 const data = [
@@ -41,6 +42,7 @@ const NewSkillScreen: React.FC<NewSkillScreenProps> = ({ navigation }) => {
     title: "",
     progress: "",
     goal: "",
+    date: "",
   });
 
   useEffect(() => {
@@ -82,7 +84,8 @@ const NewSkillScreen: React.FC<NewSkillScreenProps> = ({ navigation }) => {
       return;
     }
 
-    addSkillToDb(formData.current);
+    addSkill({ ...formData.current, date: new Date().toISOString() });
+    getSkillsList();
     navigation.navigate("Skills");
   };
 
