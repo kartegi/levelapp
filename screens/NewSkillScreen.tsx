@@ -11,7 +11,7 @@ import { Colors } from "../constants/colors";
 import Button from "../components/UI/Buttons/Button";
 
 import { FormDataValues, IOption } from "../models/common.interface";
-import { addSkillToDb, getAllSkillsFromDb } from "../utils/database";
+import { SkillsContext } from "../store/SkillsContext";
 
 const data = [
   { key: "1", value: "1 hour" },
@@ -35,6 +35,7 @@ const NewSkillScreen: React.FC<NewSkillScreenProps> = ({ navigation }) => {
   const [formError, setFormError] = useState<(keyof FormDataValues)[] | null>(
     null
   );
+  const { getSkillsList } = useContext(SkillsContext);
 
   const formData = useRef<FormDataValues>({
     title: "",

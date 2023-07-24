@@ -22,6 +22,8 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
   children,
   flatListRef,
 }) => {
+  const { getSkillsList } = useContext(SkillsContext);
+
   const swipeableRef = useRef<Swipeable | null>(null);
   const rowHeight = useSharedValue(80);
   const marginVertical = useSharedValue(10);
@@ -67,6 +69,26 @@ const SwipeableRow: React.FC<SwipeableRowProps> = ({
     swipeDirection.value = withTiming(action === "archive" ? 100 : -100);
     rowHeight.value = withTiming(0);
     marginVertical.value = withTiming(0);
+  };
+
+  const removeItem = async () => {
+    try {
+      await deleteSkill(item.id);
+      itemRemoveAnimation("delete");
+      await getSkillsList();
+    } catch (error) {
+      Alert.alert("Error", error as string);
+    }
+  };
+
+  const updateItem = async () => {
+    try {
+      await updateSkill(item.id, [
+        { key: "isarchive", value: item.isarchive ^ 1 },
+      ]);
+      itemRemoveAnimation("archive");
+      await getSkillsList();
+    } catch (error) {}
   };
 
   const onRowOpen = (direction: "left" | "right") => {

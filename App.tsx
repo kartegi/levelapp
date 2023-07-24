@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Colors } from "./constants/colors";
 import StackNavigation from "./navigation/StackNavigation/StackNavigation";
 import { init } from "./utils/database";
+import SkillsContextProvider from "./store/SkillsContext";
 
 const NewTheme = {
   ...DefaultTheme,
@@ -33,11 +34,13 @@ export default function App() {
   return (
     <>
       <StatusBar style="light" />
-      <NavigationContainer theme={NewTheme}>
-        <GestureHandlerRootView style={styles.rootContainer}>
-          <StackNavigation />
-        </GestureHandlerRootView>
-      </NavigationContainer>
+      <SkillsContextProvider>
+        <NavigationContainer theme={NewTheme}>
+          <GestureHandlerRootView style={styles.rootContainer}>
+            <StackNavigation />
+          </GestureHandlerRootView>
+        </NavigationContainer>
+      </SkillsContextProvider>
     </>
   );
 }

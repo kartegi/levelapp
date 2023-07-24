@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useContext, useState } from "react";
 
 import { StyleSheet, Alert, View, Text } from "react-native";
 
@@ -8,14 +8,14 @@ import AddButton from "../components/UI/Buttons/AddButton/AddButton";
 import SkillItem from "../components/SkillItem/SkillItem";
 
 import { Colors } from "../constants/colors";
-import { getAllSkillsFromDb } from "../utils/database";
-import { ISkillListItems } from "../models/common.interface";
+
+import { SkillsContext } from "../store/SkillsContext";
 
 const SkillListScreen = ({ navigation }: { navigation: any }) => {
   const [data, setData] = useState<ISkillListItems[]>([]);
   const [isLoading, setIsloading] = useState(false);
 
-  const flatListRef = useRef<any>(null);
+  const { skills, getSkillsList } = useContext(SkillsContext);
 
   useEffect(() => {
     getSillList();
@@ -58,9 +58,15 @@ const SkillListScreen = ({ navigation }: { navigation: any }) => {
       />
       <FlatList
         ref={(ref) => (flatListRef.current = ref?.getNativeScrollRef())}
-        data={data}
-        renderItem={({ item, index }) => (
-          <SkillItem item={item} flatListRef={flatListRef} />
+        data={skills.filter(
+          (item) => route.params.archive === !!item.isarchive
+        )}
+        renderItem={({ item }) => (
+          <SkillItem
+            item={item}
+            flatListRef={flatListRef}
+            archive={route.params.archive}
+          />
         )}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
